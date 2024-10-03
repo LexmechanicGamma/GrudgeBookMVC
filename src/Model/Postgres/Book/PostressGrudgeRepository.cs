@@ -1,13 +1,14 @@
 ﻿using GrudgeBookMvc.src.Model.Domain.Book;
+using GrudgeBookMvc.src.Model.Postgres.Migration;
 using GrudgeBookMvc.src.Model.Services.BookServices;
 
 namespace GrudgeBookMvc.src.Model.Postgres.Book
 {
     public class PostgresGrudgeRepository : IGrudgeRepository
     {
-        private GrudgeContext _grudgeContext;
+        private DamazKronContext _grudgeContext;
 
-        public PostgresGrudgeRepository(GrudgeContext grudgeContext)
+        public PostgresGrudgeRepository(DamazKronContext grudgeContext)
         {
             _grudgeContext = grudgeContext;
         }
@@ -16,13 +17,13 @@ namespace GrudgeBookMvc.src.Model.Postgres.Book
         {
             DBGrudgeAdapter adapter = new();
 
-            _grudgeContext.grudges.Add(adapter.ToModel(grudge));
+            _grudgeContext.Grudges.Add(adapter.ToModel(grudge));
             _grudgeContext.SaveChanges();
         }
 
         public void ChangeGrudgeStatus(string id, GrudgeStatus status)
         {
-            _grudgeContext.grudges.Where(grudge => grudge.Id == id).FirstOrDefault()!.
+            _grudgeContext.Grudges.Where(grudge => grudge.Id == id).FirstOrDefault()!.
                 Status = Enum.GetName(status)!;
 
             _grudgeContext.SaveChanges();
@@ -30,7 +31,7 @@ namespace GrudgeBookMvc.src.Model.Postgres.Book
         public Domain.Book.Grudge GetGrudge(string id)
         {
 
-            Grudge grudge = _grudgeContext.grudges.
+            Grudge grudge = _grudgeContext.Grudges.
                  Where(grudge => grudge.Id == id).FirstOrDefault()!;
 
             Domain.Book.Grudge parsedGrudge = grudge.ToDomain();
@@ -40,7 +41,7 @@ namespace GrudgeBookMvc.src.Model.Postgres.Book
         public List<Domain.Book.Grudge> ListGrudges()
         {
             List<Domain.Book.Grudge> grudges = new();
-            var dblist = _grudgeContext.grudges.ToList();
+            var dblist = _grudgeContext.Grudges.ToList();
 
             foreach (Grudge grudge in dblist)
             {

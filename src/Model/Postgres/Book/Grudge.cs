@@ -36,16 +36,6 @@ namespace GrudgeBookMvc.src.Model.Postgres.Book
         }
     }
 
-    public class GrudgeContext : DbContext
-    {
-        public DbSet<Grudge> grudges { get; set; }
-        public GrudgeContext(DbContextOptions<GrudgeContext> options)
-            : base(options)
-        {
-            Database.Migrate();
-        }
-    }
-
     public class DBGrudgeAdapter
     {
         public Grudge ToModel(Domain.Book.Grudge unparsedGrudge)

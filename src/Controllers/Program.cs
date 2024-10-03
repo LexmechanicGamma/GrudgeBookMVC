@@ -8,19 +8,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionData = builder.Configuration.GetConnectionString("PostgreSQLConnection");
+builder.Services.AddDbContext<DamazKronContext>(options=>options.UseNpgsql(connectionData));
 
 builder.Services.AddControllersWithViews();
 
-
-builder.Services.AddDbContext<UserDataContext>(options => options.UseNpgsql(connectionData));
-builder.Services.AddDbContext<GrudgeContext>(options => options.UseNpgsql(connectionData));
-builder.Services.AddDbContext<DamazKronContext>(options=>options.UseNpgsql(connectionData));
-
 builder.Services.AddTransient<IAuthentication, UserDataRepository>();
 builder.Services.AddTransient<AuthService>();
-
-
-
 
 builder.Services.AddTransient<IGrudgeRepository, PostgresGrudgeRepository>();
 builder.Services.AddTransient<GrudgeService>();

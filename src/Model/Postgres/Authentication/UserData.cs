@@ -25,14 +25,4 @@ namespace GrudgeBookMvc.src.Model.Postgres.Authentication
             this.SaltedPassword = SaltedPassword;
         }
     }   
-
-    public class UserDataContext : DbContext
-    {
-        public DbSet<UserData> usersData { get; set; }
-        public UserDataContext(DbContextOptions<UserDataContext> options)
-            : base(options)
-        {
-            Database.Migrate(); 
-        }
-    }
 }
