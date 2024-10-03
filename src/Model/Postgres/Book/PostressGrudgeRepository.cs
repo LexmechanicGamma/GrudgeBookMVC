@@ -1,5 +1,5 @@
 ﻿using GrudgeBookMvc.src.Model.Domain.Book;
-using GrudgeBookMvc.src.Model.Postgres.Migration;
+using GrudgeBookMvc.src.Model.Postgres.Context;
 using GrudgeBookMvc.src.Model.Services.BookServices;
 
 namespace GrudgeBookMvc.src.Model.Postgres.Book

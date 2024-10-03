@@ -1,7 +1,7 @@
 ﻿using GrudgeBookMvc.src.Model.Services.Authorization;
 
 using GrudgeBookMvc.src.Controllers.Adapters;
-using GrudgeBookMvc.src.Model.Postgres.Migration;
+using GrudgeBookMvc.src.Model.Postgres.Context;
 
 
 namespace GrudgeBookMvc.src.Model.Postgres.Authentication

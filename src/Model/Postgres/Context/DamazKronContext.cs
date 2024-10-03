@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace GrudgeBookMvc.src.Model.Postgres.Migration;
+namespace GrudgeBookMvc.src.Model.Postgres.Context;
 
 public partial class DamazKronContext : DbContext
 {
@@ -16,6 +16,6 @@ public partial class DamazKronContext : DbContext
     public DamazKronContext(DbContextOptions<DamazKronContext> options)
         : base(options)
     {
-        Database.Migrate();
+
     }
 }

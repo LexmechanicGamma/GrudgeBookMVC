@@ -9,7 +9,7 @@ namespace GrudgeBookMvc.src.Model.Domain.Authentication
         public string Id { get; init; } 
         public string Username { get; init; }
 
-        private string _salt = RandomNumberGenerator.GetBytes(128 / 8).ToString();
+        private string _salt = RandomNumberGenerator.GetBytes(128 / 8).ToString(); //TODO saves it bad
         public string Salt
         {
             get { return _salt; }
