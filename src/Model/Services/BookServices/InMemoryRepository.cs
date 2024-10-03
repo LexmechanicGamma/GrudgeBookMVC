@@ -1,18 +1,18 @@
-﻿using GrudgeBookMvc.src.Model.Domain;
-using GrudgeBookMvc.src.Model.Services;
+﻿using GrudgeBookMvc.src.Model.Domain.Book;
+using GrudgeBookMvc.src.Model.Postgres.Migration;
 
-namespace GrudgeBookMvc.src.Model
+namespace GrudgeBookMvc.src.Model.Services.BookServices
 {
     public class InMemoryGrudgeRepo : IGrudgeRepository
     {
-        Dictionary<string, Grudge> _damazKron;
+        Dictionary<string, Domain.Book.Grudge> _damazKron;
 
         public InMemoryGrudgeRepo()
         {
-            _damazKron = new Dictionary<string, Grudge>();
+            _damazKron = new Dictionary<string, Domain.Book.Grudge>();
         }
 
-        public void AddGrudge(Grudge transgression)
+        public void AddGrudge(Domain.Book.Grudge transgression)
         {
             _damazKron?.Add(transgression.Id, transgression);
         }
@@ -22,13 +22,13 @@ namespace GrudgeBookMvc.src.Model
             _damazKron[id].Status = status;
         }
 
-        public Grudge GetGrudge(string id)
+        public Domain.Book.Grudge GetGrudge(string id)
         {
             return _damazKron![id];
         }
-        public List<Grudge> ListGrudges()
+        public List<Domain.Book.Grudge> ListGrudges()
         {
-            List<Grudge> ListOfGrudges = new List<Grudge>();
+            List<Domain.Book.Grudge> ListOfGrudges = new List<Domain.Book.Grudge>();
 
             foreach (var grudge in _damazKron)
             {

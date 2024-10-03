@@ -1,11 +1,11 @@
-﻿using GrudgeBookMvc.src.Model.Domain;
-using GrudgeBookMvc.src.Views.Json;
+﻿using GrudgeBookMvc.src.Model.Domain.Book;
+using GrudgeBookMvc.src.Views.Json.Book;
 
 namespace GrudgeBookMvc.src.Controllers.Adapters
 {
     public static class GrudgeAdapters
     {
-        public static Model.Domain.Grudge ToDomain(Views.Json.Grudge grudge)
+        public static Model.Domain.Book.Grudge ToDomain(Views.Json.Book.Grudge grudge)
         {
             GrudgeStatus grudgeStatus = GrudgeStatusBuilder.FromString(grudge.Status);
 
@@ -18,7 +18,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
 
                 if (grudge.VisualizationURI == null)
                 {
-                    Model.Domain.Grudge parsedGrudge = new(
+                    Model.Domain.Book.Grudge parsedGrudge = new(
                     grudge.Id,
                     grudge.TitleOfSin,
                     time,
@@ -31,7 +31,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
                 }
                 else
                 {
-                    Model.Domain.Grudge parsedGrudge = new(
+                    Model.Domain.Book.Grudge parsedGrudge = new(
                     grudge.Id,
                     grudge.TitleOfSin,
                     time,
@@ -48,7 +48,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
                 throw new InvalidUnixTimestampException(e.Message + "Date must be in UnixTimeCode");
             }
         }
-        public static Views.Json.Grudge FromDomain(Model.Domain.Grudge grudge)
+        public static Views.Json.Book.Grudge FromDomain(Model.Domain.Book.Grudge grudge)
         {
             string parsedTimestamp = grudge.WickedHour.ToString();
 
@@ -58,7 +58,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
                 visualEvidence = grudge.VisualEvidence.ToString();
             }
 
-            Views.Json.Grudge parsedGrudge = new Views.Json.Grudge
+            Views.Json.Book.Grudge parsedGrudge = new Views.Json.Book.Grudge
             {
                 Id = grudge.Id,
                 TitleOfSin = grudge.TitleOfSin,
@@ -72,9 +72,9 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
             return parsedGrudge;
         }
 
-        public static List<Views.Json.Grudge> ListParsedGrudges(List<Model.Domain.Grudge> grudges)
+        public static List<Views.Json.Book.Grudge> ListParsedGrudges(List<Model.Domain.Book.Grudge> grudges)
         {
-            List<Views.Json.Grudge> parsedGrudges = new();
+            List<Views.Json.Book.Grudge> parsedGrudges = new();
             foreach (var grudge in grudges)
             {
                 parsedGrudges.Add(FromDomain(grudge));

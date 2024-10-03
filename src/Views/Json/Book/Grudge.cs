@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace GrudgeBookMvc.src.Views.Json
+namespace GrudgeBookMvc.src.Views.Json.Book
 {
     public record struct Grudge
     {

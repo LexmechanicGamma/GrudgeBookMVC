@@ -1,9 +1,9 @@
-﻿using GrudgeBookMvc.src.Model.Domain;
+﻿using GrudgeBookMvc.src.Model.Domain.Book;
 using Microsoft.EntityFrameworkCore;
 
-namespace GrudgeBookMvc.src.Model.Postgres
+namespace GrudgeBookMvc.src.Model.Postgres.Book
 {
-    public class Grudge 
+    public class Grudge
     {
         public string Id { get; set; }
         public string TitleOfSin { get; set; }
@@ -13,7 +13,7 @@ namespace GrudgeBookMvc.src.Model.Postgres
         public string Status { get; set; }
         public string? VisualizationURI { get; set; } = null;
 
-        public Domain.Grudge ToDomain()
+        public Domain.Book.Grudge ToDomain()
         {
             GrudgeStatus grudgeStatus = GrudgeStatusBuilder.FromString(Status);
 
@@ -23,7 +23,7 @@ namespace GrudgeBookMvc.src.Model.Postgres
                 uri = new Uri(VisualizationURI);
             }
 
-            Domain.Grudge parsedGrudge = new(
+            Domain.Book.Grudge parsedGrudge = new(
             Id,
             TitleOfSin,
             Timestamp,
@@ -42,13 +42,13 @@ namespace GrudgeBookMvc.src.Model.Postgres
         public GrudgeContext(DbContextOptions<GrudgeContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            Database.Migrate();
         }
     }
 
     public class DBGrudgeAdapter
     {
-        public Grudge ToModel(Domain.Grudge unparsedGrudge)
+        public Grudge ToModel(Domain.Book.Grudge unparsedGrudge)
         {
             string parsedStatus = Enum.GetName(unparsedGrudge.Status)!;
 

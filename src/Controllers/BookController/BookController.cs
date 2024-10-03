@@ -1,13 +1,14 @@
 ﻿using GrudgeBookMvc.src.Controllers.Adapters;
-using GrudgeBookMvc.src.Model.Domain;
-using GrudgeBookMvc.src.Model.Services;
-using GrudgeBookMvc.src.Views.Json;
+using GrudgeBookMvc.src.Model.Domain.Book;
+using GrudgeBookMvc.src.Model.Services.BookServices;
+using GrudgeBookMvc.src.Views.Json.Book;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GrudgeBookMvc.src.Controllers
+namespace GrudgeBookMvc.src.Controllers.GrudgeController
 {
     [Controller]
-    public class Book : Controller 
+    public class Book : Controller
     {
         [ActionName("PostGrudge")]
         [HttpPost]
@@ -19,7 +20,7 @@ namespace GrudgeBookMvc.src.Controllers
             var service = context.RequestServices.GetService<GrudgeService>();
             try
             {
-                var data = await request.ReadFromJsonAsync<Views.Json.Grudge>();
+                var data = await request.ReadFromJsonAsync<Views.Json.Book.Grudge>();
 
                 service.WriteGrudge(GrudgeAdapters.ToDomain(data));
                 return StatusCode(200);
@@ -61,7 +62,7 @@ namespace GrudgeBookMvc.src.Controllers
             var response = context.Response;
             var service = context.RequestServices.GetService<GrudgeService>();
             try
-            {                
+            {
                 GrudgeStatus status = GrudgeStatusBuilder.
                     FromString((string)request.Query["status"]);
 
@@ -88,7 +89,7 @@ namespace GrudgeBookMvc.src.Controllers
             {
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
-                   Error = "Internal Server Error"
+                    Error = "Internal Server Error"
                 });
                 return StatusCode(500);
             }
@@ -105,8 +106,8 @@ namespace GrudgeBookMvc.src.Controllers
             var request = context.Request;
             var response = context.Response;
             var service = context.RequestServices.GetService<GrudgeService>();
-            try 
-            {       
+            try
+            {
                 await response.WriteAsJsonAsync(GrudgeAdapters.FromDomain(service.GetGrudge(id)));
                 return StatusCode(200);
             }
@@ -130,27 +131,26 @@ namespace GrudgeBookMvc.src.Controllers
 
 
 
-        [Route("Book/GetAllGrudges")]
         [ActionName("GetAllGrudges")]
         [HttpGet]
-        public async Task<IActionResult> ListGrudges()
+        public async Task ListGrudges()
         {
             var context = ControllerContext.HttpContext;
             var request = context.Request;
             var response = context.Response;
             var service = context.RequestServices.GetService<GrudgeService>();
+
             await response.WriteAsJsonAsync(GrudgeAdapters.
                 ListParsedGrudges(
                 service.
-                ListGrudges()));
-            return StatusCode(200);
+                ListGrudges()));     
         }
 
 
 
         [ActionName("DeleteGrudge")]
         [HttpDelete]
-        public string Delete() ////////////
+        public string Delete() ////////////TODO
         {
             return "ELF!";
         }

@@ -1,4 +1,4 @@
-﻿namespace GrudgeBookMvc.src.Views.Json
+﻿namespace GrudgeBookMvc.src.Views.Json.Book
 {
     public class InvalidUnixTimestampException : Exception
     {

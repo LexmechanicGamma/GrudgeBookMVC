@@ -1,4 +1,4 @@
-﻿namespace GrudgeBookMvc.src.Model.Domain
+﻿namespace GrudgeBookMvc.src.Model.Domain.Book
 {
     public enum GrudgeStatus
     {
