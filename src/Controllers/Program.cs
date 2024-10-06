@@ -1,52 +1,57 @@
-using GrudgeBookMvc.src.Model.Postgres.Authentication;
-using GrudgeBookMvc.src.Model.Postgres.Book;
 using GrudgeBookMvc.src.Model.Postgres.Context;
-using GrudgeBookMvc.src.Model.Services.Authorization;
+using GrudgeBookMvc.src.Model.Services.Auth;
+using GrudgeBookMvc.src.Model.Services.Authentication;
 using GrudgeBookMvc.src.Model.Services.BookServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using GrudgeBookMvc.src.Controllers.AuthenticationController;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionData = builder.Configuration.GetConnectionString("PostgreSQLConnection");
+
 builder.Services.AddDbContext<DamazKronContext>(options=>options.UseNpgsql(connectionData));
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<IAuthentication, UserDataRepository>();
+builder.Services.AddTransient<IAuthenticationRepository, UserDataRepository>();
 builder.Services.AddTransient<AuthService>();
 
 builder.Services.AddTransient<IGrudgeRepository, PostgresGrudgeRepository>();
 builder.Services.AddTransient<GrudgeService>();
 
-
-
-
-
-/*builder.Services.AddAuthentication("Cookies").AddCookie
-    ("AuthScheme", options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+    AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            options.LoginPath = "/Home/Login/";
-            options.LogoutPath = "/Home/Logout/";
-            options.AccessDeniedPath = "/Home/AccessDenied/";
-        }
-    );*/
+            ValidateIssuer = true,
+            ValidIssuer = AuthOptions.ISSUER,
 
-/*builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("login-status", policy =>
-    policy.Requirements.Add(new MethodThatReturnsBool));
-});*/
+            ValidateAudience = true,
+            ValidAudience = AuthOptions.AUDIENCE,
+
+            ValidateLifetime = true,
+            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+    }
+);
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-/*app.MapControllerRoute
+app.MapControllerRoute
     (
-    name: "auth",
-    pattern: "{controller}/{action}/{username?}"
-    );*/
+    name: "Auth",
+    pattern: "{controller = DwarvenAuthentication}/{action}/{username?}"
+    );
+
 app.MapControllerRoute
     (
     name: "grudging",

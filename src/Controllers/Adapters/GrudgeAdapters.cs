@@ -1,6 +1,5 @@
 ﻿using GrudgeBookMvc.src.Model.Domain.Book;
-using GrudgeBookMvc.src.Views.Json.Book;
-
+using GrudgeBookMvc.src.Controllers.BookController;
 namespace GrudgeBookMvc.src.Controllers.Adapters
 {
     public static class GrudgeAdapters

@@ -1,4 +1,5 @@
 ﻿using GrudgeBookMvc.src.Controllers.Adapters;
+using GrudgeBookMvc.src.Controllers.BookController;
 using GrudgeBookMvc.src.Model.Domain.Book;
 using GrudgeBookMvc.src.Model.Services.BookServices;
 using GrudgeBookMvc.src.Views.Json.Book;
@@ -8,11 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace GrudgeBookMvc.src.Controllers.GrudgeController
 {
     [Controller]
+    [Authorize]
     public class Book : Controller
     {
+        [Authorize]
         [ActionName("PostGrudge")]
         [HttpPost]
-        public async Task<IActionResult> WriteGrudge()
+        public async Task WriteGrudge()
         {
             var context = ControllerContext.HttpContext;
             var request = context.Request;
@@ -23,39 +26,39 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
                 var data = await request.ReadFromJsonAsync<Views.Json.Book.Grudge>();
 
                 service.WriteGrudge(GrudgeAdapters.ToDomain(data));
-                return StatusCode(200);
+                response.StatusCode = 200;
             }
             catch (InvalidUnixTimestampException e)
             {
+                response.StatusCode = 400;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = e.Message
-                });
-                return StatusCode(400);
+                });                
             }
             catch (StatusParseException e)
             {
+                response.StatusCode = 400;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = e.Message
                 });
-                return StatusCode(400);
             }
             catch (Exception)
             {
+                response.StatusCode = 500;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = "Internal Server Error"
-                });
-                return StatusCode(500);
+                });               
             }
         }
 
 
-
+        [Authorize]
         [ActionName("UpdateGrudgeStatus")]
         [HttpPut]
-        public async Task<IActionResult> AdjustGrudgeStatus(string id)
+        public async Task AdjustGrudgeStatus(string id)
         {
             var context = ControllerContext.HttpContext;
             var request = context.Request;
@@ -63,44 +66,45 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             var service = context.RequestServices.GetService<GrudgeService>();
             try
             {
+
                 GrudgeStatus status = GrudgeStatusBuilder.
                     FromString((string)request.Query["status"]);
 
                 service.AdjustGrudgeStatus(id, status);
-                return StatusCode(200);
+                response.StatusCode = 200;
             }
             catch (StatusParseException e)
             {
+                response.StatusCode = 400;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = e.Message
                 });
-                return StatusCode(400);
             }
             catch (IdIsNotFoundException e)
             {
+                response.StatusCode = 400;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = e.Message
                 });
-                return StatusCode(400);
             }
             catch (Exception)
             {
+                response.StatusCode = 500;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = "Internal Server Error"
                 });
-                return StatusCode(500);
             }
-
         }
 
 
-
+        [Authorize]
+        //[AllowAnonymous]
         [ActionName("GetGrudge")]
         [HttpGet]
-        public async Task<IActionResult> GetGrudge(string id)
+        public async Task GetGrudge(string id)
         {
             var context = ControllerContext.HttpContext;
             var request = context.Request;
@@ -108,29 +112,46 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             var service = context.RequestServices.GetService<GrudgeService>();
             try
             {
-                await response.WriteAsJsonAsync(GrudgeAdapters.FromDomain(service.GetGrudge(id)));
-                return StatusCode(200);
+                response.StatusCode = 200;
+                await response.WriteAsJsonAsync(GrudgeAdapters.FromDomain(service.GetGrudge(id)));               
             }
             catch (IdIsNotFoundException e)
             {
+                response.StatusCode = 400;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = e.Message
                 });
-                return StatusCode(400);
+               
+            }
+            catch(ArgumentNullException e)
+            {
+                response.StatusCode = 400;
+                await response.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = e.Message
+                });
+            }
+            catch(NullReferenceException e)
+            {
+                response.StatusCode = 400;
+                await response.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = e.Message
+                });
             }
             catch (Exception)
             {
+                response.StatusCode = 500;
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = "Internal Server Error"
-                });
-                return StatusCode(500);
+                });             
             }
         }
 
 
-
+        [AllowAnonymous]
         [ActionName("GetAllGrudges")]
         [HttpGet]
         public async Task ListGrudges()
@@ -139,20 +160,31 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             var request = context.Request;
             var response = context.Response;
             var service = context.RequestServices.GetService<GrudgeService>();
-
-            await response.WriteAsJsonAsync(GrudgeAdapters.
+            try
+            {
+                await response.WriteAsJsonAsync(GrudgeAdapters.
                 ListParsedGrudges(
                 service.
-                ListGrudges()));     
+                ListGrudges()));              
+            }
+            catch
+            {
+                response.StatusCode = 500;
+                await response.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = "Internal Server Error"
+                });
+            }
         }
 
 
-
+        [Authorize]
         [ActionName("DeleteGrudge")]
         [HttpDelete]
-        public string Delete() ////////////TODO
+        public async Task<IActionResult> Delete()
         {
-            return "ELF!";
+            await Response.WriteAsJsonAsync("\"An ELF!\"");
+            return StatusCode(401, Results.Unauthorized());
         }
     }
 }

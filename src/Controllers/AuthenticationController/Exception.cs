@@ -1,4 +1,4 @@
-﻿namespace GrudgeBookMvc.src.Views.Json.AuthenticationData
+﻿namespace GrudgeBookMvc.src.Controllers.AuthenticationController
 {
     public class LoginInputsException : Exception
     {

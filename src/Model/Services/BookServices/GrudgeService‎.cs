@@ -1,5 +1,4 @@
 ﻿using GrudgeBookMvc.src.Model.Domain.Book;
-using GrudgeBookMvc.src.Model.Postgres.Context;
 
 namespace GrudgeBookMvc.src.Model.Services.BookServices
 {
@@ -43,6 +42,10 @@ namespace GrudgeBookMvc.src.Model.Services.BookServices
                 throw new IdIsNotFoundException(e.Message + "Such ID does not exist.");
             }
             catch (ArgumentNullException e)
+            {
+                throw new IdIsNotFoundException(e.Message + "Incorrect ID input.");
+            }
+            catch (NullReferenceException e)
             {
                 throw new IdIsNotFoundException(e.Message + "Incorrect ID input.");
             }

@@ -9,7 +9,9 @@ namespace GrudgeBookMvc.src.Model.Domain.Authentication
         public string Id { get; init; } 
         public string Username { get; init; }
 
-        private string _salt = RandomNumberGenerator.GetBytes(128 / 8).ToString(); //TODO saves it bad
+        private string _salt = Encryptor.GenerateSalt(
+            Convert.ToInt32(Environment.GetEnvironmentVariable("DwarfBook__SaltLength"))); 
+
         public string Salt
         {
             get { return _salt; }
@@ -32,20 +34,19 @@ namespace GrudgeBookMvc.src.Model.Domain.Authentication
             if( Email != null ) { this.Email = Email; }
             this.Username = Username;
             this.Password = Password;
-        }
-
+        }   
     }
 
-    internal static class Encryptor
+    public static class Encryptor
     {
-        internal static string ToSHA256(string str, string salt)
+        public static string ToSHA256(string unsaltedPassword, string salt)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
-                str += salt;
+                unsaltedPassword += salt;
                 StringBuilder hash = new StringBuilder();
                 byte[] hashArray = sha256.ComputeHash(
-                    Encoding.UTF8.GetBytes(str));
+                    Encoding.UTF8.GetBytes(unsaltedPassword));
                 foreach (byte b in hashArray)
                 {
                     hash.Append(b.ToString());
@@ -53,5 +54,15 @@ namespace GrudgeBookMvc.src.Model.Domain.Authentication
                 return hash.ToString();
             }
         }
+
+        internal static string GenerateSalt(int maximumSaltLength)
+        {
+            var salt = new byte[maximumSaltLength];
+            using (var random = RandomNumberGenerator.Create()) 
+            {
+                random.GetNonZeroBytes(salt);
+            }
+            return Convert.ToBase64String(salt);
+        }    
     }
 }

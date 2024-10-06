@@ -1,5 +1,4 @@
 ﻿using GrudgeBookMvc.src.Model.Domain.Book;
-using GrudgeBookMvc.src.Model.Postgres.Context;
 
 namespace GrudgeBookMvc.src.Model.Services.BookServices
 {

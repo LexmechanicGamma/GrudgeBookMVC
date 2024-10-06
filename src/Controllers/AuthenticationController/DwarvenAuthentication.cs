@@ -1,10 +1,13 @@
 ﻿using GrudgeBookMvc.src.Controllers.Adapters;
-using GrudgeBookMvc.src.Model.Postgres.Authentication;
-using GrudgeBookMvc.src.Model.Services.Authorization;
+using GrudgeBookMvc.src.Controllers.AuthenticationController;
+using GrudgeBookMvc.src.Model.Services.Auth;
+using GrudgeBookMvc.src.Model.Services.Authentication;
 using GrudgeBookMvc.src.Views.Json.AuthenticationData;
-using Microsoft.AspNetCore.Authentication;
+using GrudgeBookMvc.src.Views.Json.Book;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace GrudgeBookMvc.src.Controllers.Authentication
@@ -15,59 +18,89 @@ namespace GrudgeBookMvc.src.Controllers.Authentication
         [AllowAnonymous]
         [ActionName("registration")]
         [HttpPost]
-        public async Task<IActionResult> Registration()
+        public async Task Registration(string username)
         {
             var context = ControllerContext.HttpContext;
             var request = context.Request;
             var response = context.Response;
             var service = context.RequestServices.GetService<AuthService>();
 
-            var data = await request.ReadFromJsonAsync<RegistrationTable>();
-            var parsedData = AuthenticationAdapter.ToPostgres(
-            AuthenticationAdapter.ToDomain(data));
-            service.registerDwarf(parsedData);
+            
             try
             {
-                
-                
-
-                
-
+                var data = await request.ReadFromJsonAsync<RegistrationTable>();
+                service.RegisterDwarfData(AuthenticationAdapter.ToPostgres(
+                AuthenticationAdapter.ToDomain(data)));
+                response.StatusCode = 200;
             }
-            catch
+            catch (SuchAccountExistsException e)
             {
-                return StatusCode(400);
+                response.StatusCode = 400;
+                await response.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = e.Message
+                });
+
             }
-            return StatusCode(200);
-        }
-
-        /*[AllowAnonymous, Authorize]
-        [ActionName("authorization")]
-        [HttpPost]
-        public async Task<IActionResult> Authentication()
-        {
-            var context = ControllerContext.HttpContext;
-            var userFilledForm = context.Request.ReadFromJsonAsync<AuthenticationForm>();
-
-
-
-            var claimsIdentity = new ClaimsIdentity(userFilledForm, "AuthScheme");
-
+            catch (LoginInputsException e)
+            {
+                response.StatusCode = 400;
+                await response.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = e.Message
+                });
+            }
+            catch (Exception)
+            {
+                response.StatusCode = 500;
+                await response.WriteAsJsonAsync("Internal Server Error.");                
+            }
+            
         }
 
         [AllowAnonymous]
-        public async void Authorization() 
-        {
-
-        }
-
-        [Authorize]
-        [ActionName("logout")]
+        [ActionName("login")]
         [HttpPost]
-        public async Task<IActionResult> LogOut()
+        public async Task Authentication(string username)
         {
-            await _authorizationService.HttpContext.SignOutAsync();
-            return StatusCode(200);
-        }*/
+
+            var context = ControllerContext.HttpContext;
+            var response = context.Response;
+            var service = context.RequestServices.GetService<AuthService>();
+            
+            try
+            {
+                if (service.LoginAttemp(
+                    username, (string)context.Request.RouteValues["password"]!)) 
+                {
+                    response.StatusCode = 401; 
+                }
+                else
+                {
+                    var claims = new List<Claim>() { new Claim(ClaimTypes.Name, username) };
+
+                    var jwt = new JwtSecurityToken(
+                        issuer: AuthOptions.ISSUER,
+                        audience: AuthOptions.ISSUER,
+                        claims: claims,
+                        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(120)),
+                        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+                    );
+
+                    response.StatusCode = 200;
+                    await context.Response.WriteAsJsonAsync(new JWToken(
+                        new JwtSecurityTokenHandler().WriteToken(jwt), username));
+                }
+                            
+            }
+            catch(AccountNotFoundException e)
+            {
+                response.StatusCode = 400;
+                await response.WriteAsJsonAsync(new ErrorResponse
+                {
+                    Error = e.Message
+                });
+            }   
+        }
     }
 }
