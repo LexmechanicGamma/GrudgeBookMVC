@@ -1,7 +1,7 @@
-﻿using GrudgeBookMvc.src.Model.Domain.Book;
+﻿using GrudgeBookMvc.src.Domain.Book;
 using GrudgeBookMvc.src.Model.Postgres.Context;
 
-namespace GrudgeBookMvc.src.Model.Services.BookServices
+namespace GrudgeBookMvc.src.Services.BookServices
 {
     public class InMemoryGrudgeRepo : IGrudgeRepository
     {

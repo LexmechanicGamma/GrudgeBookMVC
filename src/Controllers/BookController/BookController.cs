@@ -1,7 +1,7 @@
 ﻿using GrudgeBookMvc.src.Controllers.Adapters;
 using GrudgeBookMvc.src.Controllers.BookController;
-using GrudgeBookMvc.src.Model.Domain.Book;
-using GrudgeBookMvc.src.Model.Services.BookServices;
+using GrudgeBookMvc.src.Domain.Book;
+using GrudgeBookMvc.src.Services.BookServices;
 using GrudgeBookMvc.src.Views.Json.Book;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +10,12 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
 {
     [Controller]
     [Authorize]
+    [Route("")]
     public class Book : Controller
     {
-        [Authorize]
-        [ActionName("PostGrudge")]
+        [AllowAnonymous]
+        //[Authorize]
+        [Route("book/grudge")]
         [HttpPost]
         public async Task WriteGrudge()
         {
@@ -34,7 +36,7 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = e.Message
-                });                
+                });
             }
             catch (StatusParseException e)
             {
@@ -50,13 +52,13 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
                 await response.WriteAsJsonAsync(new ErrorResponse
                 {
                     Error = "Internal Server Error"
-                });               
+                });
             }
         }
 
-
-        [Authorize]
-        [ActionName("UpdateGrudgeStatus")]
+        [AllowAnonymous]
+        //[Authorize]
+        [Route("Book/UpdateGrudgeStatus/{id}")]
         [HttpPut]
         public async Task AdjustGrudgeStatus(string id)
         {
@@ -100,9 +102,9 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
         }
 
 
-        [Authorize]
-        //[AllowAnonymous]
-        [ActionName("GetGrudge")]
+        //[Authorize]
+        [AllowAnonymous]
+        [Route("Book/GetGrudge/{id}")]
         [HttpGet]
         public async Task GetGrudge(string id)
         {
@@ -152,7 +154,7 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
 
 
         [AllowAnonymous]
-        [ActionName("GetAllGrudges")]
+        [Route("Book/GetAllGrudges")]
         [HttpGet]
         public async Task ListGrudges()
         {
@@ -177,9 +179,9 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             }
         }
 
-
-        [Authorize]
-        [ActionName("DeleteGrudge")]
+        [AllowAnonymous]
+        //[Authorize]
+        [Route("Book/Grudge/{id}")]
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {

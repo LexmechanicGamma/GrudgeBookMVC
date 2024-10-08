@@ -1,5 +1,6 @@
-﻿using GrudgeBookMvc.src.Model.Domain.Book;
+﻿using GrudgeBookMvc.src.Domain.Book;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace GrudgeBookMvc.src.Model.Postgres.Book
 {

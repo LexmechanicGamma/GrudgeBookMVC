@@ -1,4 +1,4 @@
-﻿namespace GrudgeBookMvc.src.Model.Domain.Book
+﻿namespace GrudgeBookMvc.src.Domain.Book
 {
     public class Grudge
     {

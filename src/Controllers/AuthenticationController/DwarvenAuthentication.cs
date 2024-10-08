@@ -1,7 +1,6 @@
 ﻿using GrudgeBookMvc.src.Controllers.Adapters;
 using GrudgeBookMvc.src.Controllers.AuthenticationController;
-using GrudgeBookMvc.src.Model.Services.Auth;
-using GrudgeBookMvc.src.Model.Services.Authentication;
+using GrudgeBookMvc.src.Services.Auth;
 using GrudgeBookMvc.src.Views.Json.AuthenticationData;
 using GrudgeBookMvc.src.Views.Json.Book;
 using Microsoft.AspNetCore.Authorization;
@@ -11,12 +10,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace GrudgeBookMvc.src.Controllers.Authentication
-{   
+{
     [Controller]
     public class DwarvenAuthentication : Controller
     {
         [AllowAnonymous]
         [ActionName("registration")]
+        [Route("DwarvenAuthentication/registration")]
         [HttpPost]
         public async Task Registration(string username)
         {
@@ -60,6 +60,7 @@ namespace GrudgeBookMvc.src.Controllers.Authentication
 
         [AllowAnonymous]
         [ActionName("login")]
+        [Route("DwarvenAuthentication/login")]      
         [HttpPost]
         public async Task Authentication(string username)
         {

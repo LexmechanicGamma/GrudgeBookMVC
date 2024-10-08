@@ -1,6 +1,6 @@
-﻿using GrudgeBookMvc.src.Model.Domain.Book;
+﻿using GrudgeBookMvc.src.Domain.Book;
 
-namespace GrudgeBookMvc.src.Model.Services.BookServices
+namespace GrudgeBookMvc.src.Services.BookServices
 {
     public interface IGrudgeRepository
     {

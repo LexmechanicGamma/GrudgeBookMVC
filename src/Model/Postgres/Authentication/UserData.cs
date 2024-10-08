@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace GrudgeBookMvc.src.Model.Postgres.Authentication 
 { 

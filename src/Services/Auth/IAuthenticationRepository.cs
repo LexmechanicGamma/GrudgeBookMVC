@@ -1,6 +1,6 @@
 ﻿using GrudgeBookMvc.src.Model.Postgres.Authentication;
 
-namespace GrudgeBookMvc.src.Model.Services.Authentication
+namespace GrudgeBookMvc.src.Services.Auth
 {
     public interface IAuthenticationRepository
     {

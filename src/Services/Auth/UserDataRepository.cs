@@ -1,8 +1,7 @@
-﻿using GrudgeBookMvc.src.Model.Services.Authentication;
-using GrudgeBookMvc.src.Model.Postgres.Context;
+﻿using GrudgeBookMvc.src.Model.Postgres.Context;
 using GrudgeBookMvc.src.Model.Postgres.Authentication;
 
-namespace GrudgeBookMvc.src.Model.Services.Auth
+namespace GrudgeBookMvc.src.Services.Auth
 {
     public class UserDataRepository : IAuthenticationRepository
     {

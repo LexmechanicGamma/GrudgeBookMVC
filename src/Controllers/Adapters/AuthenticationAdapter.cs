@@ -4,10 +4,9 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
 {
     public static class AuthenticationAdapter
     {
-        public static Model.Domain.Authentication.
-            UserData ToDomain(RegistrationTable inputedData)
+        public static Domain.Authentication.UserData ToDomain(RegistrationTable inputedData)
         {
-            Model.Domain.Authentication.UserData userData = new(
+            Domain.Authentication.UserData userData = new(
                 inputedData.Email,
                 inputedData.UserName,
                 inputedData.Password
@@ -16,8 +15,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
         }
 
         public static Model.Postgres.Authentication.
-            UserData ToPostgres(Model.Domain.Authentication.
-            UserData inputedData)
+            UserData ToPostgres(Domain.Authentication.UserData inputedData)
         {
             Model.Postgres.Authentication.
             UserData userData = new(

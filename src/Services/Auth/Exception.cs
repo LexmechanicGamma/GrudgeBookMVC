@@ -1,4 +1,4 @@
-﻿namespace GrudgeBookMvc.src.Model.Services.Auth
+﻿namespace GrudgeBookMvc.src.Services.Auth
 {
     public class SuchAccountExistsException : Exception
     {
@@ -18,7 +18,7 @@
         }
     }
 
-    public class AccountNotFoundException : Exception 
+    public class AccountNotFoundException : Exception
     {
         public AccountNotFoundException()
         {

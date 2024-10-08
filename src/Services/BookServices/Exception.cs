@@ -1,4 +1,4 @@
-﻿namespace GrudgeBookMvc.src.Model.Services.BookServices
+﻿namespace GrudgeBookMvc.src.Services.BookServices
 {
     public class GrudgeDeleteException : Exception
     {

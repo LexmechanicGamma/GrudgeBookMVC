@@ -1,10 +1,10 @@
-﻿using GrudgeBookMvc.src.Model.Domain.Book;
-using GrudgeBookMvc.src.Controllers.BookController;
+﻿using GrudgeBookMvc.src.Controllers.BookController;
+using GrudgeBookMvc.src.Domain.Book;
 namespace GrudgeBookMvc.src.Controllers.Adapters
 {
     public static class GrudgeAdapters
     {
-        public static Model.Domain.Book.Grudge ToDomain(Views.Json.Book.Grudge grudge)
+        public static Grudge ToDomain(Views.Json.Book.Grudge grudge)
         {
             GrudgeStatus grudgeStatus = GrudgeStatusBuilder.FromString(grudge.Status);
 
@@ -17,7 +17,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
 
                 if (grudge.VisualizationURI == null)
                 {
-                    Model.Domain.Book.Grudge parsedGrudge = new(
+                    Grudge parsedGrudge = new(
                     grudge.Id,
                     grudge.TitleOfSin,
                     time,
@@ -30,7 +30,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
                 }
                 else
                 {
-                    Model.Domain.Book.Grudge parsedGrudge = new(
+                    Grudge parsedGrudge = new(
                     grudge.Id,
                     grudge.TitleOfSin,
                     time,
@@ -47,7 +47,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
                 throw new InvalidUnixTimestampException(e.Message + "Date must be in UnixTimeCode");
             }
         }
-        public static Views.Json.Book.Grudge FromDomain(Model.Domain.Book.Grudge grudge)
+        public static Views.Json.Book.Grudge FromDomain(Grudge grudge)
         {
             string parsedTimestamp = grudge.WickedHour.ToString();
 
@@ -71,7 +71,7 @@ namespace GrudgeBookMvc.src.Controllers.Adapters
             return parsedGrudge;
         }
 
-        public static List<Views.Json.Book.Grudge> ListParsedGrudges(List<Model.Domain.Book.Grudge> grudges)
+        public static List<Views.Json.Book.Grudge> ListParsedGrudges(List<Grudge> grudges)
         {
             List<Views.Json.Book.Grudge> parsedGrudges = new();
             foreach (var grudge in grudges)

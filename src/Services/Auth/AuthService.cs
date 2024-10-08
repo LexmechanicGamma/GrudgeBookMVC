@@ -1,8 +1,8 @@
 ﻿using GrudgeBookMvc.src.Controllers.AuthenticationController;
-using GrudgeBookMvc.src.Model.Domain.Authentication;
-using GrudgeBookMvc.src.Model.Services.Auth;
+using GrudgeBookMvc.src.Domain.Authentication;
+using GrudgeBookMvc.src.Services.Auth;
 
-namespace GrudgeBookMvc.src.Model.Services.Authentication
+namespace GrudgeBookMvc.src.Services.Auth
 {
     public class AuthService
     {
@@ -10,17 +10,17 @@ namespace GrudgeBookMvc.src.Model.Services.Authentication
 
         public AuthService(IAuthenticationRepository DwarfRepo)
         {
-            this._dwarfRepository = DwarfRepo;
+            _dwarfRepository = DwarfRepo;
         }
 
-        public void RegisterDwarfData(Postgres.Authentication.UserData dwarfData)
+        public void RegisterDwarfData(Model.Postgres.Authentication.UserData dwarfData)
         {
             if (_dwarfRepository.IsExistingAccount(dwarfData.UserName))
             {
                 throw new SuchAccountExistsException("This UserName already exists.");
-            }          
+            }
 
-            _dwarfRepository.RegisterDwarf(dwarfData);          
+            _dwarfRepository.RegisterDwarf(dwarfData);
         }
 
         public bool LoginAttemp(string username, string password)
@@ -28,14 +28,14 @@ namespace GrudgeBookMvc.src.Model.Services.Authentication
             if (_dwarfRepository.IsExistingAccount(username))
             {
                 var dwarfAccount = _dwarfRepository.GetAccountByUserName(username);
-                return dwarfAccount.SaltedPassword == Encryptor.ToSHA256(password, dwarfAccount.Salt);               
+                return dwarfAccount.SaltedPassword == Encryptor.ToSHA256(password, dwarfAccount.Salt);
             }
             else
             {
                 throw new AccountNotFoundException("Username not found.");
             }
         }
-        public Postgres.Authentication.UserData GetExistingAccount(string username)
+        public Model.Postgres.Authentication.UserData GetExistingAccount(string username)
         {
             try
             {
