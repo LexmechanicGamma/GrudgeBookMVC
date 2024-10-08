@@ -12,12 +12,10 @@ using System.Security.Claims;
 namespace GrudgeBookMvc.src.Controllers.Authentication
 {
     [Controller]
+    [Route("api/v1/auth")]
     public class DwarvenAuthentication : Controller
     {
-        [AllowAnonymous]
-        [ActionName("registration")]
-        [Route("DwarvenAuthentication/registration")]
-        [HttpPost]
+        [HttpPost("signup")]
         public async Task Registration(string username)
         {
             var context = ControllerContext.HttpContext;
@@ -57,11 +55,8 @@ namespace GrudgeBookMvc.src.Controllers.Authentication
             }
             
         }
-
-        [AllowAnonymous]
-        [ActionName("login")]
-        [Route("DwarvenAuthentication/login")]      
-        [HttpPost]
+     
+        [HttpPost("signin")]
         public async Task Authentication(string username)
         {
 
@@ -82,7 +77,7 @@ namespace GrudgeBookMvc.src.Controllers.Authentication
 
                     var jwt = new JwtSecurityToken(
                         issuer: AuthOptions.ISSUER,
-                        audience: AuthOptions.ISSUER,
+                        audience: AuthOptions.AUDIENCE,
                         claims: claims,
                         expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(120)),
                         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)

@@ -5,20 +5,20 @@
     "version": "v1"
   },
   "paths": {
-    "/Book/{action}/Book/PostGrudge": {
+    "/api/v1/grudge": {
       "post": {
         "tags": [
           "Book"
         ],
-        "parameters": [
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+        "responses": {
+          "200": {
+            "description": "OK"
           }
+        }
+      },
+      "get": {
+        "tags": [
+          "Book"
         ],
         "responses": {
           "200": {
@@ -27,29 +27,7 @@
         }
       }
     },
-    "/Book/{action}/PostC": {
-      "post": {
-        "tags": [
-          "Book"
-        ],
-        "parameters": [
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Book/{action}/Book/UpdateGrudgeStatus/{id}": {
+    "/api/v1/grudge/{id}": {
       "put": {
         "tags": [
           "Book"
@@ -62,14 +40,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -77,38 +47,7 @@
             "description": "OK"
           }
         }
-      }
-    },
-    "/Book/{action}/PutA": {
-      "put": {
-        "tags": [
-          "Book"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Book/{action}/Book/GetGrudge/{id}": {
+      },
       "get": {
         "tags": [
           "Book"
@@ -121,14 +60,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -136,96 +67,13 @@
             "description": "OK"
           }
         }
-      }
-    },
-    "/Book/{action}/GetA": {
-      "get": {
-        "tags": [
-          "Book"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Book/{action}/Book/GetAllGrudges": {
-      "get": {
-        "tags": [
-          "Book"
-        ],
-        "parameters": [
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Book/{action}/GetB": {
-      "get": {
-        "tags": [
-          "Book"
-        ],
-        "parameters": [
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/Book/{action}/Book/DeleteGrudge/{id}": {
+      },
       "delete": {
         "tags": [
           "Book"
         ],
         "parameters": [
           {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -241,29 +89,7 @@
         }
       }
     },
-    "/Book/{action}/DeleteA": {
-      "delete": {
-        "tags": [
-          "Book"
-        ],
-        "parameters": [
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/DwarvenAuthentication/{action}/DwarvenAuthentication/registration": {
+    "/api/v1/auth/signup": {
       "post": {
         "tags": [
           "DwarvenAuthentication"
@@ -275,14 +101,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -292,7 +110,7 @@
         }
       }
     },
-    "/DwarvenAuthentication/{action}/PostA": {
+    "/api/v1/auth/signin": {
       "post": {
         "tags": [
           "DwarvenAuthentication"
@@ -301,73 +119,6 @@
           {
             "name": "username",
             "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/DwarvenAuthentication/{action}/DwarvenAuthentication/login/{username}": {
-      "post": {
-        "tags": [
-          "DwarvenAuthentication"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/DwarvenAuthentication/{action}/PostB": {
-      "post": {
-        "tags": [
-          "DwarvenAuthentication"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
             "schema": {
               "type": "string"
             }

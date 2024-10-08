@@ -10,12 +10,9 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
 {
     [Controller]
     [Authorize]
-    [Route("")]
+    [Route("/api/v1/grudge")]
     public class Book : Controller
     {
-        [AllowAnonymous]
-        //[Authorize]
-        [Route("book/grudge")]
         [HttpPost]
         public async Task WriteGrudge()
         {
@@ -56,10 +53,7 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             }
         }
 
-        [AllowAnonymous]
-        //[Authorize]
-        [Route("Book/UpdateGrudgeStatus/{id}")]
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task AdjustGrudgeStatus(string id)
         {
             var context = ControllerContext.HttpContext;
@@ -101,11 +95,7 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             }
         }
 
-
-        //[Authorize]
-        [AllowAnonymous]
-        [Route("Book/GetGrudge/{id}")]
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task GetGrudge(string id)
         {
             var context = ControllerContext.HttpContext;
@@ -152,9 +142,6 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             }
         }
 
-
-        [AllowAnonymous]
-        [Route("Book/GetAllGrudges")]
         [HttpGet]
         public async Task ListGrudges()
         {
@@ -179,14 +166,13 @@ namespace GrudgeBookMvc.src.Controllers.GrudgeController
             }
         }
 
-        [AllowAnonymous]
-        //[Authorize]
-        [Route("Book/Grudge/{id}")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete()
+        [HttpDelete("{id}")]
+        public async Task Delete()
         {
-            await Response.WriteAsJsonAsync("\"An ELF!\"");
-            return StatusCode(401, Results.Unauthorized());
+            var context = ControllerContext.HttpContext;
+            context.Response.StatusCode = 401;
+            await Response.WriteAsJsonAsync("An ELF!"); //TODO send as an object
+            
         }
     }
 }

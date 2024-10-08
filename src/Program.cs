@@ -80,7 +80,7 @@ app.UseSwaggerUI(options => { options.SwaggerEndpoint("swagger/v1/swagger.json",
 app.MapControllerRoute
     (
     name: "Auth",
-    pattern: "{controller = DwarvenAuthentication}/{action}/{username?}"
+    pattern: "{controller}/{action}/{username?}"
     )
     .WithName("AuthRoute")
     .WithOpenApi(operations => new(operations)
